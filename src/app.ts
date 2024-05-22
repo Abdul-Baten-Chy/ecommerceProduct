@@ -8,8 +8,19 @@ const app: Application = express()
 app.use(express.json())
 app.use(cors())
 
+// route
 app.use('/api/products', productsRoute)
 app.use('/api/orders', orderRoute)
+
+// sending error message for mis-matching route
+app.use((req: Request, res: Response) => {
+  res.status(404).json({
+    success: false,
+    message: 'Route not found',
+  })
+})
+
+// root route
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello World!')
 })
