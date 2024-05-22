@@ -4,15 +4,21 @@ import { Order } from './orders.model'
 
 const createOrderInDb = async (order: Torders) => {
   const { productId, quantity: orderQnty } = order
-  console.log(productId, orderQnty)
 
   const orderedProduct = await Product.find({ _id: productId })
   if (orderedProduct[0].inventory.quantity >= orderQnty) {
     const result = await Order.create(order)
     const updatedProducQuantity = await Product.findOneAndUpdate(
       { _id: productId },
-      { $inc: { 'inventory.quantity': -orderQnty } } // Corrected syntax
+      { $inc: { 'inventory.quantity': -orderQnty } },
+      { new: true }
     )
+    if (updatedProducQuantity?.inventory.quantity === 0) {
+      await Product.findOneAndUpdate(
+        { _id: productId },
+        { $set: { 'inventory.inStock': false } }
+      )
+    }
 
     return result
   } else {
