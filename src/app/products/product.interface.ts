@@ -1,4 +1,5 @@
 export type Tvariant = { type: string; value: string }
+export type Tinventory = { quantity: number; inStock: boolean }
 
 export type Tproduct = {
   name: string
@@ -7,8 +8,5 @@ export type Tproduct = {
   category: string
   tags: string[]
   variants: Tvariant[]
-  inventory: {
-    quantity: number
-    inStock: boolean
-  }
+  inventory: Tinventory
 }

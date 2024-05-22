@@ -1,7 +1,12 @@
+import { Product } from '../products/product.model'
 import { Torders } from './order.interface'
 import { Order } from './orders.model'
 
 const createOrderInDb = async (order: Torders) => {
+  const { productId } = order
+  const orderedProduct = await Product.find({ _id: productId })
+  console.log(orderedProduct)
+
   const result = await Order.create(order)
   return result
 }

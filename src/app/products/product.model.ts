@@ -1,14 +1,14 @@
 import { Schema, model } from 'mongoose'
-import { Tproduct, Tvariant } from './product.interface'
+import { Tinventory, Tproduct, Tvariant } from './product.interface'
 
 export const TvariantSchema = new Schema<Tvariant>({
   type: String,
   value: String,
 })
 
-export const Tinventory = new Schema<Tvariant>({
-  type: String,
-  value: String,
+export const inventorySchema = new Schema<Tinventory>({
+  quantity: { type: Number, required: [true, 'quantity is required'] },
+  inStock: { type: Boolean, required: [true, 'in stock is required'] },
 })
 
 const productSchema = new Schema<Tproduct>({
@@ -18,10 +18,7 @@ const productSchema = new Schema<Tproduct>({
   category: { type: String, required: [true, 'category is required'] },
   tags: { type: [String], required: [true, 'tags is required'] },
   variants: { type: [TvariantSchema], required: [true, 'variant is required'] },
-  inventory: {
-    type: Tinventory,
-    required: [true, 'inventory required'],
-  },
+  inventory: inventorySchema,
 })
 
 export const Product = model<Tproduct>('Product', productSchema)
